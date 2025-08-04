@@ -1,99 +1,105 @@
-# Todo Backend API
+⚙️ Task Manager Backend (MERN)
+This is the backend for the MERN Task Manager application. It is built with Node.js, Express.js, and MongoDB, and serves RESTful APIs for user authentication, task management, and admin control.
 
-A RESTful API for managing todo tasks with user authentication.
+task-manager-backend/
+│
+├── controllers/         # Logic for users, tasks, and admin operations
+├── models/              # Mongoose schemas (User, Task)
+├── routes/              # API route handlers
+├── middlewares/         # Auth & error middleware
+├── utils/               # Helper utilities (token, etc.)
+├── config/              # DB connection
+├── .env                 # Environment variables
+├── server.js            # Entry point
+├── package.json
+└── README.md
 
-## Features
+🔧 Tech Stack
+Node.js
+Express.js
+MongoDB with Mongoose
+JWT for authentication
+bcryptjs for password hashing
+dotenv for environment configs
+cors, helmet for security
+Multer (optional for image upload if needed)
 
-- User registration and authentication with JWT
-- CRUD operations for todo tasks
-- User profile management
-- Admin panel for viewing all tasks
+🧩 Features
+👤 User
+    Register & Login (with JWT)
+    Create, Read, Update, Delete Tasks
+    Confirm Task → Move to history
+    Get personal task history
 
-## Setup
+🛠️ Admin
+    View all users and tasks
+    Edit/Delete any user or task
+    Filter tasks by user
 
-1. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+📦 Installation
+    # Clone the repository
+    git clone https://github.com/your-username/task-manager-backend.git
+    cd task-manager-backend
+    
+# Install dependencies
+npm install
 
-2. **Environment Variables:**
-   Create a `.env` file in the root directory with:
-   ```
-   MONGODB_URI=mongodb://localhost:27017/todo
-   PORT=8080
-   JWT_SECRET=your-super-secret-jwt-key
-   NODE_ENV=development
-   ```
+# Create .env file
+touch .env
 
-3. **Start MongoDB:**
-   Make sure MongoDB is running on your system.
+🔐 Environment Variables (.env)
+    PORT=5000
+    MONGO_URI=your_mongodb_connection_string
+    JWT_SECRET=your_jwt_secret
 
-4. **Run the server:**
-   ```bash
-   # Development mode
-   npm run dev
-   
-   # Production mode
-   npm start
-   ```
+▶️ Running the Server
+    # Development
+    npm run dev
 
-## API Endpoints
+   # Production
+    npm start
 
-### Authentication
-- `POST /api/users/register` - Register a new user
-- `POST /api/users/login` - Login user
-- `GET /api/users/me` - Get current user info (requires auth)
+📡 API Endpoints Overview
+Method	Endpoint	Description	Auth Required
+POST	/api/auth/register	Register a new user	✅
+POST	/api/auth/login	Login existing user	✅
+GET	/api/tasks	Get all user tasks	✅
+POST	/api/tasks	Create new task	✅
+PUT	/api/tasks/:id	Update task	✅
+DELETE	/api/tasks/:id	Delete task	✅
+PUT	/api/tasks/confirm/:id	Confirm task (to history)	✅
+GET	/api/history	Get user's task history	✅
+GET	/api/admin/users	Get all users	✅ (admin)
+GET	/api/admin/tasks	Get all tasks	✅ (admin)
+PUT	/api/admin/users/:id	Edit user	✅ (admin)
+DELETE	/api/admin/users/:id	Delete user	✅ (admin)
 
-### User Management
-- `POST /api/users/get-user` - Get user by email
-- `PUT /api/users/update-user` - Update user profile
-
-### Tasks
-- `POST /api/tasks` - Create a new task
-- `GET /api/tasks/:email` - Get tasks by user email
-- `PUT /api/tasks/:id` - Update task
-- `DELETE /api/tasks/:id` - Delete task
-- `GET /api/tasks` - Get all tasks (admin)
-
-## Request Examples
-
-### Register User
-```json
-POST /api/users/register
+🗃️ Models
+🧍 User
 {
-  "firstName": "John",
-  "lastName": "Doe",
-  "email": "john@example.com",
-  "mobile": "1234567890",
-  "gender": "male",
-  "password": "password123",
-  "confirmPassword": "password123"
+  name: String,
+  email: String,
+  password: String (hashed),
+  role: String (default: 'user') // 'admin' | 'user'
 }
-```
-
-### Login
-```json
-POST /api/users/login
+Task
 {
-  "email": "john@example.com",
-  "password": "password123"
+  userId: mongoose.Schema.Types.ObjectId,
+  title: String,
+  description: String,
+  status: String, // pending | confirmed
+  createdAt: Date,
+  updatedAt: Date
 }
-```
 
-### Create Task
-```json
-POST /api/tasks
-{
-  "title": "Complete project",
-  "description": "Finish the todo application",
-  "email": "john@example.com"
-}
-```
+🚀 Deployment Notes
+MongoDB Atlas for DB
+Render / Railway / Cyclic for hosting
+CORS enabled to allow frontend access
 
-## Technologies Used
-
-- Node.js
-- Express.js
-- MongoDB with Mongoose
-- JWT for authentication
-- bcryptjs for password hashing 
+✅ Best Practices Used
+Passwords hashed with bcrypt
+JWT-based authentication
+Role-based access control for admin
+Organized folder structure
+Error handling middleware
